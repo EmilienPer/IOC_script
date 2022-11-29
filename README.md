@@ -71,8 +71,7 @@ The very latest developments can be obtained via git.
 10. After authentication on the target, the name and the OS type are displayed on the GUI
   ![target](/images/target.PNG)
 11. Wait for the end of scans (a popup message will appear at the end)
-
- ![done](/images/done.PNG)
+  ![done](/images/done.PNG)
 12. The report is available on the output directory. You can also find lynis and loki report
 
 
