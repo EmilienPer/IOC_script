@@ -1,0 +1,7 @@
+Jinja2
+requests
+netaddr
+Fabric
+psutil
+wmi
+xhtml2pdf

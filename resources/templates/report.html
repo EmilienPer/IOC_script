@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IOC and security issues scanner</title>
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 2cm;
+
+
+        }
+
+        table {
+            padding: 2px;
+            margin-bottom: 10px;
+            border: 1px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1> IOC and security issues scanner</h1>
+
+<h2>Scan information</h2>
+<table>
+    <tr>
+        <th>Target:</th>
+        <td>{{scan_info.target}}</td>
+    </tr>
+    <tr>
+        <th>Used SSH user</th>
+        <td>{{scan_info.user}}</td>
+    </tr>
+    <tr>
+        <th>Scan time</th>
+        <td>{{scan_info.start}} -> {{scan_info.end}}</td>
+    </tr>
+    <tr>
+        <th>Detected OS</th>
+        <td>{{scan_info.os}}</td>
+    </tr>
+    <tr>
+        <th>Target Name</th>
+        <td>{{scan_info.hostname}}</td>
+    </tr>
+    <tr>
+        <th>Scans</th>
+        <td><b>IOC:</b> {{scan_info.ioc}} <b>Security issues:</b>{{scan_info.security_issues}}</td>
+    </tr>
+</table>
+<h2>Executive summary</h2>
+<table>
+    <tr>
+        <th>Criteria</th>
+        <th>Value</th>
+    </tr>
+    {% if scan_info.ioc %}
+    <tr>
+        <th>Indicator of compromise (IOC)</th>
+        {%if scan_info.detected_ioc==0%}
+        <td style="color: green">No IOC detected{%else%}
+        <td style="color: red"> Infected ({{scan_info.detected_ioc}}){%endif%}</td>
+    </tr>
+    {%endif%}
+    {%if scan_info.security_issues%}
+    <tr>
+        <th>Vulnerabilities / Security issues</th>
+        {%if scan_info.detected_vulnerabilities==0%}
+        <td style="color: green">No issue detected{%else%}
+        <td style="color: red"> Not secure ({{scan_info.detected_vulnerabilities}}){%endif%}</td>
+    </tr>
+    {%endif%}
+</table>
+{%if scan_info.security_issues%}
+<h2>Vulnerabilities / Security issues</h2>
+{%for key,value in vulnerabilities.items()%}
+<h3>{{key}} ({{value.count}})</h3>
+
+<table>
+    <tr>
+        <th width="70%">Suggestion</th>
+        <th>Ref</th>
+    </tr>
+    {%for item in value.data%}
+    <tr>
+        <td width="65%">{{item.suggestion}}</td>
+        <td><a href="{{item.ref}}">{{item.ref}}</a></td>
+    </tr>
+    {%endfor%}
+</table>
+{%endfor%}
+{%endif%}
+
+
+{% if scan_info.ioc %}
+<h2>IOC scan</h2>
+<h3> Detected dangerous Files</h3>
+{% for line in loki.FileScan %}
+<table>
+    <tr>
+        <th style="background: gainsboro">Path</th>
+        <td colspan="5" style="background: gainsboro">{{line.file_path}}</td>
+    </tr>
+    <tr>
+        <th>Created on</th>
+        <td>{{line.created}}</td>
+        <th>Modified on</th>
+        <td>{{line.modified}}</td>
+        <th>Last access</th>
+        <td>{{line.accessed}}</td>
+    </tr>
+    <tr>
+        <th>Size</th>
+        <td colspan="5">{{line.size}}</td>
+    </tr>
+    <tr>
+        <th>MD5</th>
+        <td colspan="5">{{line.md5}}</td>
+    </tr>
+    <tr>
+        <th>SH1</th>
+        <td colspan="5">{{line.sha1}}</td>
+    </tr>
+    <tr>
+        <th>SHA256</th>
+        <td colspan="5">{{line.sha256}}</td>
+    </tr>
+    <tr>
+        <th>Reasons</th>
+        <td colspan="5">
+            <ul>
+                {% for r in line.reasons%}
+                <li>
+                    {{r.reason}}
+                    {%if r.description%}{{r.description}}
+                    {%elif r.description2%}{{r.description2}}{%endif%}
+                    {%if r.hash%} HASH: {{r.hash}}
+                    {%elif r.pattern%} PATTERN: {{r.pattern}}{%endif%}
+                </li>
+                {%endfor%}
+            </ul>
+        </td>
+    </tr>
+</table>
+{%endfor%}
+{%for key,value in loki.items()%}
+{%if key != 'FileScan' %}
+<h3>{{key}}</h3>
+{%for item in value%}
+{{item}}
+{%endfor%}
+{%endif%}
+{%endfor%}
+
+{% endif %}
+
+</body>
+</html>
