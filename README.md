@@ -61,27 +61,38 @@ The very latest developments can be obtained via git.
 2. If a new version is available, we strongly advise you to update it
 
 3. The main window appears :
+
+
  ![Main window](/images/main_window.png)
+ 
  
 4. On the first use, update Loki (CTRL+L) and Loki signature (CTRL+U)
 
 5. Complete authentication information
 
+
  ![authentication](/images/authentication.PNG)
+ 
  
 6. Select scans you want to run
 
+
   ![scan](/images/scans.PNG)
+  
   
 7.  Select the output type and the path to the directory to use for the output
 
+
   ![output_selection](/images/output.PNG)
+  
   
 8. Start the scan. A  scan can take a long time (2-3h)
 
 10. After authentication on the target, the name and the OS type are displayed on the GUI
 
+
   ![target](/images/target.PNG)
+  
   
 11. Wait for the end of scans (a popup message will appear at the end)
 
