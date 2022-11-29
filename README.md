@@ -95,8 +95,9 @@ This issues is due to yara-python on the target.
 To solve it, we found 2 solutions (tried on Ubuntu):
 - 1. Install yara using the following documentation: https://yara.readthedocs.io/en/stable/gettingstarted.html#installing-with-vcpkg
   2. Install yara-python
-    ```git clone --recursive https://github.com/VirusTotal/yara-python
-    cd yara-python
-    python setup.py build
-    sudo python setup.py install```
+
+        git clone --recursive https://github.com/VirusTotal/yara-python
+        cd yara-python
+        python setup.py build
+        sudo python setup.py install
 - install yara-python 4.1.0 (`pip install yara-python==4.1.0`)
