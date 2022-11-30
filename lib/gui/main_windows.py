@@ -35,6 +35,7 @@ from typing import Union
 
 import _tkinter
 
+from lib.gui.user_interface import User_interface
 from lib.target.main import Target
 from lib.tools_utils.Loki import Loki
 from lib.tools_utils.Lynis import Lynis
@@ -43,7 +44,7 @@ from lib.updater.loki import LOKIUpdater, LogAdaptator
 from lib.updater.project import Updater
 
 
-class GUI:
+class GUI(User_interface):
     """
     The Tkinter windows of the application
     """
@@ -64,7 +65,7 @@ class GUI:
     def __init__(self) -> None:
         # Define the windows
         logging.debug('GUI initialisation')
-        updater = Updater()
+        updater = Updater(self)
         self.windows = tkinter.Tk()
 
         self.windows.title("IOC Security Issue Scanner (Version:{})".format(updater.info["name"]))
@@ -133,7 +134,15 @@ class GUI:
         :return: 
         """
         messagebox.showerror(title, message)
-
+    @staticmethod
+    def askquestion(title, message):
+        """
+        Ask yes or no for a question
+                :param title: the title of the pop up
+                :param message: the message
+                :return:
+        """
+        return messagebox.askquestion(title,message)
     def not_yet_implemented(self) -> None:
         """
             This method show a messagebox to warm the user the functionality is not yet implemented
@@ -448,7 +457,7 @@ class GUI:
                           "password=*********;"
                           "key_file={};"
                           "port={};"
-                          "gui={};"
+                          "user_interface={};"
                           "security_issues_scan={};"
                           "ioc_scan={};"
                           "output_type={};"
@@ -468,7 +477,7 @@ class GUI:
                    password=self.convert_in_default_if_empty(self.password_field.get()),
                    key_file=self.convert_in_default_if_empty(self.key_file_field.get()),
                    port=self.convert_in_default_if_empty(int(self.port_field.get()), 22),
-                   gui=self,
+                   user_interface=self,
                    security_issues_scan=self.security_issues_scan.get(),
                    ioc_scan=self.IOC_scan.get(),
                    output_type=self.output_type_field.get(),
