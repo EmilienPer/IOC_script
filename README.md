@@ -54,6 +54,8 @@ The very latest developments can be obtained via git.
        python3 ioc_security_issues_scanner.py
 
 ## Usage
+There is two way to use this program 
+### GUI
 1. Start the application (after install all requirements)
 
        python3 ioc_security_issues_scanner.py
@@ -100,6 +102,43 @@ The very latest developments can be obtained via git.
   
 12. The report is available on the output directory. You can also find lynis and loki report
 
+### Command line
+    usage: python3 ioc_security_issues_scanner.py [-h] [--update {all,program,loki,sign} | --scan TARGET] [-u USER] [-k KEY_FILE | -p PASSWORD] [--port PORT] [-t {PDF,JSON}] [-P PATH] [--noioc] [--noissue]    
+        
+    optional arguments:
+      -h, --help            show this help message and exit
+      --update {all,program,loki,sign}
+                            Use this option to update an element of this program
+      --scan TARGET         The target IP address
+      -u USER, --user USER  The Target's SSH username
+      -k KEY_FILE, --key_file KEY_FILE
+                            Path to the private key for SSH authentication
+      -p PASSWORD, --password PASSWORD
+                            Password for SSH authentication
+      --port PORT           The Target's SSH port
+      -t {PDF,JSON}, --type {PDF,JSON}
+                            The report type
+      -P PATH, --path PATH  The report output directory
+      --noioc               Do not scan for IOC
+      --noissue             Do not scan for Security issues
+      
+#### Examples
+Update program, loki and signatures
+        
+        python3 ioc_security_issues_scanner.py --update all
+
+Update loki
+            
+        python3 ioc_security_issues_scanner.py --update loki
+
+Run a scan on 127.0.0.1 with private key file and save report as PDF in tmp directory
+
+        python ioc_security_issues_scanner.py --scan 127.0.0.1 -u user -k /path/to/the/private.key -t PDF -P tmp
+        
+Run a scan on 127.0.0.1 with  password but do not scan ioc
+
+        python ioc_security_issues_scanner.py --scan 127.0.0.1 -u user -p the_password -t PDF -P tmp --noioc
+     
 ## Contribute
 Do you have something to share? Create an issue or pull request on GitHub. 
 
