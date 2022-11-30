@@ -9,6 +9,7 @@ colorama==0.4.6
 cryptography==38.0.4
 cssselect2==0.7.0
 fabric==2.7.1
+Fabric3=1.14.post1
 future==0.18.2
 html5lib==1.1
 idna==3.4
