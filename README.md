@@ -25,7 +25,6 @@ Thanks to the use of Loki IOC scanner and Lynis, this program is able to execute
 - Scan Windows Target: For the moment, the scan is only available on Linux target due to Lynis purpose. We are currently looking for a open source compatible scanner for windows to integrate into the program.
 - Yara rules, File name and hash importation: Currently, the signature are based on the signature given by Loki IOC scanner. In a future version, we are going to include the possibility for the user to import his own rules
 - Lynis update: Very soon, the Lynis update will be integrated into the program
-- Command Line interface: The use of the program is only possible from the GUI. We are going to add the possibility to run a scan in command line for a better integration in automatic tools
 
 ## Requirements
 - python 3
