@@ -20,7 +20,7 @@ IOC and Security issues scanner
 """
 __author__ = "Emilien Peretti"
 __license__ = "GPL"
-__version__ = "Alfa-0.0.1"
+__version__ = "Alfa-0.1.1"
 
 import argparse
 import logging
