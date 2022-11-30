@@ -35,6 +35,7 @@ from typing import Union
 
 import _tkinter
 
+from lib.gui.user_interface import User_interface
 from lib.target.main import Target
 from lib.tools_utils.Loki import Loki
 from lib.tools_utils.Lynis import Lynis
@@ -43,7 +44,7 @@ from lib.updater.loki import LOKIUpdater, LogAdaptator
 from lib.updater.project import Updater
 
 
-class GUI:
+class GUI(User_interface):
     """
     The Tkinter windows of the application
     """
@@ -64,7 +65,7 @@ class GUI:
     def __init__(self) -> None:
         # Define the windows
         logging.debug('GUI initialisation')
-        updater = Updater()
+        updater = Updater(self)
         self.windows = tkinter.Tk()
 
         self.windows.title("IOC Security Issue Scanner (Version:{})".format(updater.info["name"]))
@@ -115,26 +116,52 @@ class GUI:
         self.windows.config(menu=menu_bar)
 
     @staticmethod
-    def not_yet_implemented() -> None:
+    def info(title: str, message: str) -> None:
+        """
+        Show info in popup
+        :param title: the title of the pop up
+        :param message: the message
+        :return: 
+        """
+        messagebox.showinfo(title, message)
+
+    @staticmethod
+    def error(title: str, message: str) -> None:
+        """
+        Show error in popup
+        :param title: the title of the pop up
+        :param message: the message
+        :return: 
+        """
+        messagebox.showerror(title, message)
+    @staticmethod
+    def askquestion(title, message):
+        """
+        Ask yes or no for a question
+                :param title: the title of the pop up
+                :param message: the message
+                :return:
+        """
+        return messagebox.askquestion(title,message)
+    def not_yet_implemented(self) -> None:
         """
             This method show a messagebox to warm the user the functionality is not yet implemented
         """
         logging.debug('GUI not yet implemented call')
-        messagebox.showerror("Coming Soon", "We are sorry. This function is not yet implemented !")
+        self.error("Coming Soon", "We are sorry. This function is not yet implemented !")
 
-    @staticmethod
-    def about() -> None:
+    def about(self) -> None:
         """
             This method shows a messagebox with information about this tool
         """
         logging.debug('GUI about call')
         updater = Updater()
-        messagebox.showinfo("IOC Security Issue Scanner",
-                            "Current version: {}\nThis program aims to detect indicator of compromise (IOC)"
-                            " and potential security issues.\n"
-                            "To work, the tool uses Lynis (https://cisofy.com/lynis/) for security issues and Loki "
-                            "IOC scanner (https://github.com/Neo23x0/Loki). ".format(
-                                updater.info["name"]))
+        self.info("IOC Security Issue Scanner",
+                  "Current version: {}\nThis program aims to detect indicator of compromise (IOC)"
+                  " and potential security issues.\n"
+                  "To work, the tool uses Lynis (https://cisofy.com/lynis/) for security issues and Loki "
+                  "IOC scanner (https://github.com/Neo23x0/Loki). ".format(
+                      updater.info["name"]))
 
     @staticmethod
     def update() -> None:
@@ -329,9 +356,9 @@ class GUI:
             r = updater.update_loki()
             self.log("End update of Loki", "info")
             if r:
-                messagebox.showinfo("Loki Update", "Loki has been successfully updated!")
+                self.info("Loki Update", "Loki has been successfully updated!")
             else:
-                messagebox.showerror("Loki Update", "Loki update failed...")
+                self.error("Loki Update", "Loki update failed...")
 
         _thread.start_new_thread(_update_loki, ())
 
@@ -343,8 +370,7 @@ class GUI:
         """
         logging.debug('GUI get lynis info')
 
-    @staticmethod
-    def get_loki_info() -> None:
+    def get_loki_info(self) -> None:
         """
             Show loki information
         """
@@ -367,7 +393,7 @@ class GUI:
         else:
             update = "?"
             signature = "?"
-        messagebox.showinfo("Loki info.", "Last update: {}\nLast signatures update: {}".format(update, signature))
+        self.info("Loki info.", "Last update: {}\nLast signatures update: {}".format(update, signature))
 
     def update_loki_signature(self) -> None:
         """
@@ -382,9 +408,9 @@ class GUI:
             r = updater.update_signatures()
             self.log("End update of Loki", "info")
             if r:
-                messagebox.showinfo("Loki Signatures Update", "Loki signatures has been successfully updated!")
+                self.info("Loki Signatures Update", "Loki signatures has been successfully updated!")
             else:
-                messagebox.showerror("Loki Update", "Loki signatures update failed...")
+                self.error("Loki Update", "Loki signatures update failed...")
 
         _thread.start_new_thread(_update_loki_sign, ())
 
@@ -431,27 +457,27 @@ class GUI:
                           "password=*********;"
                           "key_file={};"
                           "port={};"
-                          "gui={};"
+                          "user_interface={};"
                           "security_issues_scan={};"
                           "ioc_scan={};"
                           "output_type={};"
                           "output_path={}".format(
-                           self.convert_in_default_if_empty(self.host_field.get()),
-                           self.convert_in_default_if_empty(self.user_field.get()),
-                           self.convert_in_default_if_empty(self.key_file_field.get()),
-                           self.convert_in_default_if_empty(int(self.port_field.get()), 22),
-                           self,
-                           self.security_issues_scan.get(),
-                           self.IOC_scan.get(),
-                           self.output_type_field.get(),
-                           self.output_path_field.get()
-                            ))
+                self.convert_in_default_if_empty(self.host_field.get()),
+                self.convert_in_default_if_empty(self.user_field.get()),
+                self.convert_in_default_if_empty(self.key_file_field.get()),
+                self.convert_in_default_if_empty(int(self.port_field.get()), 22),
+                self,
+                self.security_issues_scan.get(),
+                self.IOC_scan.get(),
+                self.output_type_field.get(),
+                self.output_path_field.get()
+            ))
             Target(host=self.convert_in_default_if_empty(self.host_field.get()),
                    user=self.convert_in_default_if_empty(self.user_field.get()),
                    password=self.convert_in_default_if_empty(self.password_field.get()),
                    key_file=self.convert_in_default_if_empty(self.key_file_field.get()),
                    port=self.convert_in_default_if_empty(int(self.port_field.get()), 22),
-                   gui=self,
+                   user_interface=self,
                    security_issues_scan=self.security_issues_scan.get(),
                    ioc_scan=self.IOC_scan.get(),
                    output_type=self.output_type_field.get(),

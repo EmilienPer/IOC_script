@@ -28,6 +28,7 @@ from tkinter import messagebox
 from fabric.operations import run
 from fabric.state import env
 
+from lib.gui.user_interface import User_interface
 from lib.parser.loki_parser import LokiParser
 from lib.reporter.main import ReportFormat
 from lib.target.linux_target import Linux
@@ -41,7 +42,7 @@ class Target:
     os = None
 
     def __init__(self, host: str, user: str, password: str = None, key_file: str = None, port: int = 22,
-                 gui=None, security_issues_scan: bool = True, ioc_scan: bool = True, output_type="TXT",
+                 user_interface:User_interface=None, security_issues_scan: bool = True, ioc_scan: bool = True, output_type="TXT",
                  output_path=".") -> None:
         """
         :param host: the IP address of the target
@@ -49,7 +50,7 @@ class Target:
         :param password: the password of the user (use password or key file)
         :param key_file: the SSH key file path (use password or key file)
         :param port: the SSh port (default:22)
-        :param gui: the GUI object (should be an instance of GUI class)
+        :param user_interface: the user interface object
         :param security_issues_scan: True to start a security issues scan
         :param ioc_scan: True to start a IOC scan
         :param output_path: the path for all output
@@ -61,7 +62,7 @@ class Target:
         self.password = password
         self.key_file = key_file
         self.port = port
-        self.gui = gui
+        self.user_interface = user_interface
         self.output_type = output_type
         self.output_path = output_path
         env.port = port
@@ -104,11 +105,10 @@ class Target:
                 report["scan_info"]["hostname"] = self.os.get_hostname()
                 report["scan_info"]["ioc"] = False
                 report["scan_info"]["security_issues"] = False
-                if self.gui is not None:
-                    self.gui.set_os_detected(report["scan_info"]["os"])
-                    self.gui.set_host_name(report["scan_info"]["hostname"])
+                self.user_interface.set_os_detected(report["scan_info"]["os"])
+                self.user_interface.set_host_name(report["scan_info"]["hostname"])
                 if found_os == "windows":
-                    messagebox.showerror("Coming soon",
+                    self.user_interface.error("Coming soon",
                                          "Unfortunately, we are not yet able to scan a Windows system."
                                          " Sorry for the disturb")
                     return
@@ -121,7 +121,7 @@ class Target:
                     self.run_ioc_scan(report)
                 report["scan_info"]["end"] = datetime.now()
                 ReportFormat(report).generate_report(self.output_type, self.output_path)
-                messagebox.showinfo("Done!", "Scan completed successfully!")
+                self.user_interface.info("Done!", "Scan completed successfully!")
         else:
             self.log("No host/username found", log_type="error")
 
@@ -149,8 +149,8 @@ class Target:
         :return: None
         """
 
-        if self.gui is not None:
-            self.gui.log(message, log_type)
+        if self.user_interface is not None:
+            self.user_interface.log(message, log_type)
         else:
             now = datetime.now()
             print("[{}] {} {}".format(now.strftime("%m/%d/%Y, %H:%M:%S"), log_type, message))

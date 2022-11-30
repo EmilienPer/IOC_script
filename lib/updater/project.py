@@ -31,6 +31,7 @@ from zipfile import ZipFile
 import psutil
 import requests
 
+from lib.gui.user_interface import User_interface
 from lib.updater.config import Config
 
 
@@ -56,13 +57,14 @@ class Updater(Config):
     already_ask = False
     info = {"id": 0, "created_at": 0, name: "", "tag_name": "", "body": "", "auto_check_update": True, "name": ""}
 
-    def __init__(self):
+    def __init__(self,user_interface:User_interface=None,check_update:bool=True):
         super().__init__()
+        self.user_interface=user_interface
         self.info = self.json_obj[self.name]
-        if self.info["auto_check_update"] and not self.already_ask:
+        if self.info["auto_check_update"] and not self.already_ask and check_update:
             self.check_release()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls,user_interface, *args, **kwargs):
         if cls.__instance is None:
             cls.__instance = super(Updater, cls).__new__(cls, *args, **kwargs)
         return cls.__instance
@@ -78,20 +80,24 @@ class Updater(Config):
             if "id" in last_release and self.info["id"] != last_release["id"]:
                 root = tkinter.Tk()
                 root.withdraw()
-                to_update = messagebox.askquestion("Update available!",
-                                                   "A new version of this tool is available ({})\n Do you want to "
-                                                   "update now?".format(
-                                                       last_release["name"]))
+                if self.user_interface is not None:
+                    to_update = self.user_interface.askquestion("Update available!",
+                                                       "A new version of this tool is available ({})\n Do you want to "
+                                                       "update now?".format(
+                                                           last_release["name"]))
+                else:
+                    to_update=True
                 self.already_ask = True
                 root.destroy()
                 if to_update == "yes":
                     self.update()
-            elif from_script:
-                messagebox.showinfo("No update needed", "You are up to date!")
+            elif from_script and self.user_interface is not None:
+                self.user_interface.info("No update needed", "You are up to date!")
         else:
             root = tkinter.Tk()
             root.withdraw()
-            messagebox.showerror("Error", "An error occurred")
+            if self.user_interface is not None:
+                self.user_interface.error("Error", "An error occurred")
             root.destroy()
 
     def update(self, last_release=None):
@@ -104,7 +110,8 @@ class Updater(Config):
             r = requests.get("{}/latest".format(self.release_api))
             if r.status_code == 200:
                 last_release = r.json()
-        if "id" in last_release and self.info["id"] != last_release["id"]:
+
+        if last_release is not None and "id" in last_release and self.info["id"] != last_release["id"]:
             for asset in last_release['assets']:
                 file_name = asset['browser_download_url'].split("/")[-1]
                 tmp_file = os.path.join(os.path.dirname(__file__), "tmp", file_name)
@@ -121,9 +128,12 @@ class Updater(Config):
             self.write_change(self.name, info_key=None, info_value=self.info)
             root = tkinter.Tk()
             root.withdraw()
-            restart = messagebox.askquestion("Update done!",
+            if self.user_interface is not None:
+                restart = self.user_interface.askquestion("Update done!",
                                              "The update is complete. To apply the changes, please restart the "
                                              "program\nDo you want to restart?")
+            else:
+                restart=True
             root.destroy()
             if restart == "yes":
                 restart_program()
