@@ -104,11 +104,10 @@ class Target:
                 report["scan_info"]["hostname"] = self.os.get_hostname()
                 report["scan_info"]["ioc"] = False
                 report["scan_info"]["security_issues"] = False
-                if self.gui is not None:
-                    self.gui.set_os_detected(report["scan_info"]["os"])
-                    self.gui.set_host_name(report["scan_info"]["hostname"])
+                self.gui.set_os_detected(report["scan_info"]["os"])
+                self.gui.set_host_name(report["scan_info"]["hostname"])
                 if found_os == "windows":
-                    messagebox.showerror("Coming soon",
+                    self.gui.error("Coming soon",
                                          "Unfortunately, we are not yet able to scan a Windows system."
                                          " Sorry for the disturb")
                     return
@@ -121,7 +120,7 @@ class Target:
                     self.run_ioc_scan(report)
                 report["scan_info"]["end"] = datetime.now()
                 ReportFormat(report).generate_report(self.output_type, self.output_path)
-                messagebox.showinfo("Done!", "Scan completed successfully!")
+                self.gui.info("Done!", "Scan completed successfully!")
         else:
             self.log("No host/username found", log_type="error")
 
