@@ -44,7 +44,6 @@ if len(sys.argv) == 1:
     GUI()
 else:
     parser = argparse.ArgumentParser(
-        prog='IOC and security issues scanner',
         description='This program aims to detect Indicator of compromise (IOC) and security issues. Main page : '
                     'https://github.com/EmilienPer/ioc_security_issue_scanner',
     )
