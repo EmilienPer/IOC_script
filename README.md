@@ -100,10 +100,6 @@ The very latest developments can be obtained via git.
   
 12. The report is available on the output directory. You can also find lynis and loki report
 
-
-## Versions
-### Alfa-0.0.1 (current)
-First version
 ## Contribute
 Do you have something to share? Create an issue or pull request on GitHub. 
 
