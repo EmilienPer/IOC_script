@@ -67,16 +67,16 @@
     {%endif%}
     {%if scan_info.security_issues%}
     <tr>
-        <th>Vulnerabilities / Security issues</th>
-        {%if scan_info.detected_vulnerabilities==0%}
+        <th>Security issues</th>
+        {%if scan_info.detected_security_issues==0%}
         <td style="color: green">No issue detected{%else%}
-        <td style="color: red"> Not secure ({{scan_info.detected_vulnerabilities}}){%endif%}</td>
+        <td style="color: red"> Not secure ({{scan_info.detected_security_issues}}){%endif%}</td>
     </tr>
     {%endif%}
 </table>
 {%if scan_info.security_issues%}
-<h2>Vulnerabilities / Security issues</h2>
-{%for key,value in vulnerabilities.items()%}
+<h2>Security issues</h2>
+{%for key,value in security_issues.items()%}
 <h3>{{key}} ({{value.count}})</h3>
 
 <table>
@@ -135,8 +135,7 @@
                 {% for r in line.reasons%}
                 <li>
                     {{r.reason}}
-                    {%if r.description%}{{r.description}}
-                    {%elif r.description2%}{{r.description2}}{%endif%}
+                    {%if r.description%}{{r.description}}{%endif%}
                     {%if r.hash%} HASH: {{r.hash}}
                     {%elif r.pattern%} PATTERN: {{r.pattern}}{%endif%}
                 </li>

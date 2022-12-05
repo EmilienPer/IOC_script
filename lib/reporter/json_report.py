@@ -32,6 +32,8 @@ def to_json(output_path: str, report_dict: dict) -> bool:
     :param report_dict: the json to save
     :return: True if no error
     """
+    if not isinstance(report_dict,dict):
+        return False
     try:
         with open(output_path, "w") as f:
             json.dump(report_dict, f, indent=4, sort_keys=True, default=str)

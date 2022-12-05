@@ -30,17 +30,24 @@ class LokiParser:
     Parser for loki report
     """
 
-    def __init__(self, filepath):
+    def __init__(self, filepath_or_string, is_filepath=True):
         """
-        :param filepath: Local path to the loki report
+        :param filepath_or_string: Local path to the loki report
         """
         self.detected = []
         try:
-            with open(filepath, 'r') as f:
-                for line in f.readlines():
-                    self.detected.append(line.split(","))
+            if filepath_or_string is not None and len(filepath_or_string) > 0:
+                if is_filepath:
+                    with open(filepath_or_string, 'r') as f:
+                        for line in f.readlines():
+                            self.detected.append(line.rstrip().split(","))
+                else:
+                    for line in filepath_or_string.split("\n"):
+                        self.detected.append(line.rstrip().split(","))
+        except:
+            logging.error('Error during initialize lokiparser with file "{}"'.format(filepath_or_string))
         finally:
-            pass
+            logging.debug('Detected {}'.format(self.detected))
 
     def parse(self) -> dict:
         """
@@ -54,15 +61,18 @@ class LokiParser:
                 if line[3] not in out_dict:
                     out_dict[line[3]] = []
                 if line[3] == "FileScan":
-                    out_dict[line[3]].append(parse_file_scan(",".join(line[4:])))
+                    line_data = parse_filescan_line(",".join(line[4:]))
+                    if line_data:
+                        out_dict[line[3]].append(line_data)
                 else:
                     out_dict[line[3]].append(",".join(line[4:]))
             else:
-                out_dict["unclassified"].append(line)
+                if len(line) != 0:
+                    out_dict["unclassified"].append(line)
         return out_dict
 
 
-def parse_file_scan(line):
+def parse_filescan_line(line):
     """
     Parse the log file
     :param line:
@@ -82,11 +92,40 @@ def parse_file_scan(line):
             file_info_dict["reasons"] = []
             reasons = split_reason[1:]
             for r in reasons:
-                r2 = "\d+: (?P<reason>((?!(PATTERN|SUBSCORE|TYPE)).)*)\s((TYPE: (?P<log_type>\w+) HASH: (" \
-                     "?P<hash>\w+) SUBSCORE: \d+ DESC: (?P<description>.*))|(SUBSCORE: \d+ DESCRIPTION: (" \
-                     "?P<description2>((?!REF).)*)\s)|(PATTERN: (?P<pattern>[^\s]+) SUBSCORE: \d+ DESC: .*)) "
-                file_info_dict["reasons"].append(re.match(r2, r).groupdict())
-        return file_info_dict
+                finding = extract_reason_data_for_filescan(r)
+                if finding is not None:
+                    file_info_dict["reasons"].append(finding)
+        if file_info_dict != {}:
+            return file_info_dict
+        return None
     except Exception as e:
         logging.error('error during parsing loki line "{}":{}'.format(line, e))
-        return {"error": e, "line": line}
+        return None
+
+
+def extract_reason_data_for_filescan(reason_str):
+    """
+    Extract IOC reason from string using a regex
+    :param reason_str: the reason line of a IOC detected in loki report
+    :return:
+    """
+    try:
+        if "File Name IOC matched" in reason_str:
+            regex = "\d+: File Name IOC matched PATTERN: (?P<pattern>[^\s]+) SUBSCORE: \d+ DESC: (?P<description>.*)"
+            reason = "File Name IOC matched"
+        elif "Malware Hash" in reason_str:
+            regex = "\d+: Malware Hash TYPE: (?P<log_type>\w+) HASH: (?P<hash>\w+) SUBSCORE: \d+ DESC: (?P<description>.*)"
+            reason = "Malware Hash"
+        elif "Yara Rule" in reason_str:
+            regex = "\d+: Yara Rule MATCH: (?P<hash>\w+) SUBSCORE: \d+ DESCRIPTION: (?P<description>.*) REF: .* AUTHOR: " \
+                    ".* (MATCHES: .*)* "
+            reason = "Yara Rule"
+        else:
+            logging.error('error during parsing loki line reason"{}":Unknown pattern'.format(reason_str))
+            return None
+        finding = re.match(regex, reason_str).groupdict()
+        finding["reason"] = reason
+        return finding
+    except Exception as e:
+        logging.error('error during parsing loki line reason"{}":{}'.format(reason_str, e))
+        return None

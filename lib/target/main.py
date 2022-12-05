@@ -43,7 +43,7 @@ class Target:
 
     def __init__(self, host: str, user: str, password: str = None, key_file: str = None, port: int = 22,
                  user_interface:User_interface=None, security_issues_scan: bool = True, ioc_scan: bool = True, output_type="TXT",
-                 output_path=".") -> None:
+                 output_path=".",start_scan=True) -> None:
         """
         :param host: the IP address of the target
         :param user: The SSH user on the target
@@ -76,7 +76,8 @@ class Target:
         # Create output tmp directory
         self.output_tmp_path = os.path.join(self.output_path, "tmp")
         os.makedirs(self.output_tmp_path, exist_ok=True)
-        self.start_scans(ioc_scan, security_issues_scan)
+        if start_scan:
+            self.start_scans(ioc_scan, security_issues_scan)
 
     def start_scans(self, ioc_scan: bool, security_issues_scan: bool) -> None:
         """
@@ -113,9 +114,7 @@ class Target:
                                          " Sorry for the disturb")
                     return
                 if security_issues_scan:
-                    self.log("------- Start Security Issues Scan --------", log_type="info")
-                    report["scan_info"]["security_issues"] = True
-                    report["vulnerabilities"] = self.os.vulnerability_scan(self.output_tmp_path)
+                    self.run_security_issues_scan(report)
                 # Start IOC scan
                 if ioc_scan:
                     self.run_ioc_scan(report)
@@ -124,6 +123,16 @@ class Target:
                 self.user_interface.info("Done!", "Scan completed successfully!")
         else:
             self.log("No host/username found", log_type="error")
+
+    def run_security_issues_scan(self, report:dict)-> None:
+        """
+                Run Security issues scan
+                :param report:  the report
+                :return:
+                """
+        self.log("------- Start Security Issues Scan --------", log_type="info")
+        report["scan_info"]["security_issues"] = True
+        report["security_issues"] = self.os.security_issues_scan(self.output_tmp_path)
 
     def run_ioc_scan(self, report: dict) -> None:
         """

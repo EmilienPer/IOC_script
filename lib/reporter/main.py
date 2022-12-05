@@ -42,16 +42,18 @@ class ReportFormat:
             this function aims to compute extra useful information of the report
         """
         try:
+            if "scan_info" not in self.report_dict:
+                self.report_dict["scan_info"]={}
             if "loki" in self.report_dict:
                 count = 0
                 for key in self.report_dict["loki"]:
                     count += len(self.report_dict["loki"][key])
                 self.report_dict["scan_info"]["detected_ioc"] = count
-            if "vulnerabilities" in self.report_dict:
+            if "security_issues" in self.report_dict:
                 count = 0
-                for key in self.report_dict["vulnerabilities"]:
-                    count += int(self.report_dict["vulnerabilities"][key]["count"])
-                self.report_dict["scan_info"]["detected_vulnerabilities"] = count
+                for key in self.report_dict["security_issues"]:
+                    count += int(self.report_dict["security_issues"][key]["count"])
+                self.report_dict["scan_info"]["detected_security_issues"] = count
         except Exception as e:
             logging.error('error during compute extra data of the report : {}'.format(e))
 
