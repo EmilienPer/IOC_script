@@ -88,7 +88,7 @@ class OSType:
         """
         raise NotImplemented()
 
-    def vulnerability_scan(self, output_dir):
+    def security_issues_scan(self, output_dir):
         """
         run a security issues scan
         :param output_dir:
@@ -115,7 +115,8 @@ class OSType:
         :param log_type: the log_type of message (error, debug, info, warning,...)
         :return: None
         """
-        self.outer_instance.log(message, log_type)
+        if self.outer_instance is not None:
+            self.outer_instance.log(message, log_type)
 
     @staticmethod
     def escape_ansi(line: str) -> str:
@@ -124,9 +125,10 @@ class OSType:
         :param line: the string to sanitize
         :return: the string sanitized
         """
-        # ansi_escape = re.compile(r'((\x9B|\x1B\[)[0-?]*[ -\/]*[@-~])|\x1b]0;\x07')
-        ansi_escape = re.compile(r'((\x9B|\x1B\[)[0-?]*[ -/]*[@-~])|\x1b]0;\x07')
-        return ansi_escape.sub('', line)
+        if isinstance(line,str):
+            ansi_escape = re.compile(r'((\x9B|\x1B\[)[0-?]*[ -/]*[@-~])|\x1b]0;\x07')
+            return ansi_escape.sub('', line)
+        return line
 
     def sanitize(self, text: str, to_remove=None) -> str:
         """

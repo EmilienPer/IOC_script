@@ -47,7 +47,6 @@ class Linux(OSType):
         self.loki_report_path = "{}/loki.log".format(self.base_loki)
         self.loki = Loki()
         self.lynis = Lynis()
-        print(self.base_loki, self.loki_report_path)
 
     def _get_uname(self) -> str:
         """Get the operating system name"""
@@ -79,7 +78,6 @@ class Linux(OSType):
             for elem in listdir(local_path):
                 l_path = os.path.join(os.path.dirname(__file__), local_path, elem)
                 r_path = os.path.join(remote_base, elem).replace("\\", "/")
-
                 if os.path.isfile(l_path):
                     put(l_path, r_path)
                 else:
@@ -93,7 +91,7 @@ class Linux(OSType):
             logging.error('error during send {} to {} : {}'.format(local_path, remote_base, e))
             return False
 
-    def vulnerability_scan(self, output_dir: str):
+    def security_issues_scan(self, output_dir: str):
         """
         run a security issues scan
         :param output_dir: the output directory for the report on the target

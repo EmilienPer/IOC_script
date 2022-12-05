@@ -461,7 +461,7 @@ class Loki(object):
                     fileInfo = "FILE: %s SCORE: %s TYPE: %s SIZE: %s FIRST_BYTES: %s %s %s " % (
                         filePath, total_score, fileType, fileSize, firstBytesString, hashString, getAgeString(filePath))
 
-                    # Now print the total result
+                    # Now print the total content_to_parse
                     if total_score >= args.a:
                         message_type = "ALERT"
                     elif total_score >= args.w:
@@ -497,7 +497,7 @@ class Loki(object):
                 matches = rules.match(data=fileData,
                                       externals={
                                           'filename': fileName.decode('utf-8'),
-                                          'filepath': filePath.decode('utf-8'),
+                                          'filepath_or_string': filePath.decode('utf-8'),
                                           'extension': extension,
                                           'filetype': fileType,
                                           'md5': md5,
@@ -1157,7 +1157,7 @@ class Loki(object):
                                 compiledRules = yara.compile(source=yara_rule_data
                                                              , externals={
                                         'filename': dummy,
-                                        'filepath': dummy,
+                                        'filepath_or_string': dummy,
                                         'extension': dummy,
                                         'filetype': dummy,
                                         'md5': dummy,
@@ -1189,7 +1189,7 @@ class Loki(object):
                 logger.log("INFO", "Init", "Initializing all YARA rules at once (composed string of all rule files)")
                 compiledRules = yara.compile(source=yaraRules, externals={
                     'filename': dummy,
-                    'filepath': dummy,
+                    'filepath_or_string': dummy,
                     'extension': dummy,
                     'filetype': dummy,
                     'md5': dummy,
