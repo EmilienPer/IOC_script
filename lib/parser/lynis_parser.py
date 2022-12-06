@@ -54,20 +54,20 @@ def get_part_title(content_to_parse, title_and_count_tuple_list):
     :return: a list of title [index_of_title_in_result,title,number_of_elem_in_part]
     """
     index_table = []
-    if isinstance(title_and_count_tuple_list,list) and isinstance(content_to_parse,str):
+    if isinstance(title_and_count_tuple_list, list) and isinstance(content_to_parse, str):
         for title_tuple in title_and_count_tuple_list:
-            if len(title_tuple) ==2 and isinstance(title_tuple[0],str):
-                    t = re.match("(?P<title>.+)\s\((?P<count>\d+)\)", title_tuple[0])
-                    if t:
-                        title = t.groupdict()["title"]
-                        count = t.groupdict()["count"]
-                    else:
-                        title = title_tuple[0]
-                        count = 0
-                    try:
-                        index_table.append([content_to_parse.index(title_tuple[0]), title, count])
-                    except:
-                        pass
+            if len(title_tuple) == 2 and isinstance(title_tuple[0], str):
+                t = re.match("(?P<title>.+)\s\((?P<count>\d+)\)", title_tuple[0])
+                if t:
+                    title = t.groupdict()["title"]
+                    count = t.groupdict()["count"]
+                else:
+                    title = title_tuple[0]
+                    count = 0
+                try:
+                    index_table.append([content_to_parse.index(title_tuple[0]), title, count])
+                except:
+                    pass
     return index_table
 
 
@@ -77,9 +77,9 @@ def get_title_and_count(file_suggestion_part):
     :param file_suggestion_part: the lynis suggestion part
     :return:
     """
-    if isinstance(file_suggestion_part,str):
+    if isinstance(file_suggestion_part, str):
         titles_count = re.findall("(?P<title>.+)\s\((?P<count>\d+)\):\n----------------------------",
-                              file_suggestion_part)
+                                  file_suggestion_part)
         return titles_count
     else:
         return []
@@ -91,9 +91,9 @@ def get_suggestion_part(file_content):
     :param file_content:
     :return:
     """
-    if isinstance(file_content,str):
+    if isinstance(file_content, str):
         split = file_content.split("=" * 80)
-        if len(split)>=2:
+        if len(split) >= 2:
             return split[1].replace("  ", "")
         else:
             return None
@@ -104,7 +104,7 @@ class LynisParser:
         Parser for Lynis report
         """
 
-    def __init__(self, filepath_or_content: str, is_file_path: True):
+    def __init__(self, filepath_or_content: str, is_file_path:bool=True):
         self.filepath = filepath_or_content
         if is_file_path:
             try:

@@ -24,7 +24,7 @@ __license__ = "GPL"
 import json
 import os
 
-TOOL_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),"resources", "tools")
+TOOL_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "resources", "tools")
 TOOL_CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "config")
 
 

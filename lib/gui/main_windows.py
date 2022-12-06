@@ -134,6 +134,7 @@ class GUI(User_interface):
         :return: 
         """
         messagebox.showerror(title, message)
+
     @staticmethod
     def askquestion(title, message):
         """
@@ -142,7 +143,8 @@ class GUI(User_interface):
                 :param message: the message
                 :return:
         """
-        return messagebox.askquestion(title,message)
+        return messagebox.askquestion(title, message)
+
     def not_yet_implemented(self) -> None:
         """
             This method show a messagebox to warm the user the functionality is not yet implemented

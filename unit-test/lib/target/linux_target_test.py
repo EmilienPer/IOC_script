@@ -51,6 +51,7 @@ class TestInstallLynis(unittest.TestCase):
     """
     Test for install_lynis method
     """
+
     def test(self):
         m = MagicMock(return_value=None)
         with patch("lib.target.linux_target.Linux.send_directory", m.send_directory, create=True):
@@ -91,6 +92,7 @@ class TestInstallLoki(unittest.TestCase):
         m.sudo.assert_has_calls(
             [call("pip3 install -r {}/requirements.txt || pip install -r {}/requirements.txt".format(
                 linux.base_loki, linux.base_loki))])
+
 
 class TestRemoveLoki(unittest.TestCase):
     def test(self):

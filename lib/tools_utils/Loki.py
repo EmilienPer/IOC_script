@@ -21,7 +21,6 @@ IOC and Security issues scanner
 __author__ = "Emilien Peretti"
 __license__ = "GPL"
 
-
 import os
 
 from lib.tools_utils.Tool import Tool, TOOL_PATH

@@ -38,5 +38,7 @@ class TestComputeExtraInfo(unittest.TestCase):
             ReportFormat({"loki": {"FileScan": [1, 2, 3, 4, 5, 6], "IOC": [1, 2, 3, 4, 5, 6]}}).report_dict,
             {'loki': {'FileScan': [1, 2, 3, 4, 5, 6], 'IOC': [1, 2, 3, 4, 5, 6]}, 'scan_info': {'detected_ioc': 12}})
         self.assertEqual(
-            ReportFormat({"security_issues":{},"loki": {"FileScan": [1, 2, 3, 4, 5, 6], "IOC": [1, 2, 3, 4, 5, 6]}}).report_dict,
-            {"security_issues":{},'loki': {'FileScan': [1, 2, 3, 4, 5, 6], 'IOC': [1, 2, 3, 4, 5, 6]}, 'scan_info': {'detected_ioc': 12, 'detected_security_issues': 0}})
+            ReportFormat({"security_issues": {},
+                          "loki": {"FileScan": [1, 2, 3, 4, 5, 6], "IOC": [1, 2, 3, 4, 5, 6]}}).report_dict,
+            {"security_issues": {}, 'loki': {'FileScan': [1, 2, 3, 4, 5, 6], 'IOC': [1, 2, 3, 4, 5, 6]},
+             'scan_info': {'detected_ioc': 12, 'detected_security_issues': 0}})
