@@ -57,13 +57,13 @@ def get_part_title(content_to_parse, title_and_count_tuple_list):
     if isinstance(title_and_count_tuple_list, list) and isinstance(content_to_parse, str):
         for title_tuple in title_and_count_tuple_list:
             if len(title_tuple) == 2 and isinstance(title_tuple[0], str):
-                t = re.match("(?P<title>.+)\s\((?P<count>\d+)\)", title_tuple[0])
+                t = re.match("\s+(?P<title>.+)\s\((?P<count>\d+)\)", title_tuple[0])
                 if t:
                     title = t.groupdict()["title"]
                     count = t.groupdict()["count"]
                 else:
                     title = title_tuple[0]
-                    count = 0
+                    count = title_tuple[1]
                 try:
                     index_table.append([content_to_parse.index(title_tuple[0]), title, count])
                 except:
