@@ -35,7 +35,7 @@ from lib.updater.project import Updater
 logging.basicConfig(
     format='%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s:%(lineno)d in function %(funcName)s] %(message)s',
     datefmt='%Y-%m-%d:%H:%M:%S',
-    level=logging.DEBUG
+    level=logging.ERROR
 )
 logger = logging.getLogger(__name__)
 if sys.version_info[0] < 3:
