@@ -43,7 +43,7 @@ class ReportFormat:
         """
         try:
             if "scan_info" not in self.report_dict:
-                self.report_dict["scan_info"]={}
+                self.report_dict["scan_info"] = {}
             if "loki" in self.report_dict:
                 count = 0
                 for key in self.report_dict["loki"]:

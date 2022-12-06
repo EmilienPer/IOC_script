@@ -125,7 +125,7 @@ class OSType:
         :param line: the string to sanitize
         :return: the string sanitized
         """
-        if isinstance(line,str):
+        if isinstance(line, str):
             ansi_escape = re.compile(r'((\x9B|\x1B\[)[0-?]*[ -/]*[@-~])|\x1b]0;\x07')
             return ansi_escape.sub('', line)
         return line

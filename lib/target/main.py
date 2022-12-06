@@ -23,7 +23,6 @@ __license__ = "GPL"
 
 import os
 from datetime import datetime
-from tkinter import messagebox
 
 from fabric.operations import run
 from fabric.state import env
@@ -42,8 +41,9 @@ class Target:
     os = None
 
     def __init__(self, host: str, user: str, password: str = None, key_file: str = None, port: int = 22,
-                 user_interface:User_interface=None, security_issues_scan: bool = True, ioc_scan: bool = True, output_type="TXT",
-                 output_path=".",start_scan=True) -> None:
+                 user_interface: User_interface = None, security_issues_scan: bool = True, ioc_scan: bool = True,
+                 output_type="TXT",
+                 output_path=".", start_scan=True) -> None:
         """
         :param host: the IP address of the target
         :param user: The SSH user on the target
@@ -110,8 +110,8 @@ class Target:
                 self.user_interface.set_host_name(report["scan_info"]["hostname"])
                 if found_os == "windows":
                     self.user_interface.error("Coming soon",
-                                         "Unfortunately, we are not yet able to scan a Windows system."
-                                         " Sorry for the disturb")
+                                              "Unfortunately, we are not yet able to scan a Windows system."
+                                              " Sorry for the disturb")
                     return
                 if security_issues_scan:
                     self.run_security_issues_scan(report)
@@ -124,7 +124,7 @@ class Target:
         else:
             self.log("No host/username found", log_type="error")
 
-    def run_security_issues_scan(self, report:dict)-> None:
+    def run_security_issues_scan(self, report: dict) -> None:
         """
                 Run Security issues scan
                 :param report:  the report

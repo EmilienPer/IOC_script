@@ -25,10 +25,8 @@ import io
 import os
 import sys
 import tkinter
-from tkinter import messagebox
 from zipfile import ZipFile
 
-import psutil
 import requests
 
 from lib.gui.user_interface import User_interface
@@ -57,14 +55,14 @@ class Updater(Config):
     already_ask = False
     info = {"id": 0, "created_at": 0, name: "", "tag_name": "", "body": "", "auto_check_update": True, "name": ""}
 
-    def __init__(self,user_interface:User_interface=None,check_update:bool=True):
+    def __init__(self, user_interface: User_interface = None, check_update: bool = True):
         super().__init__()
-        self.user_interface=user_interface
+        self.user_interface = user_interface
         self.info = self.json_obj[self.name]
         if self.info["auto_check_update"] and not self.already_ask and check_update:
             self.check_release()
 
-    def __new__(cls,user_interface, *args, **kwargs):
+    def __new__(cls, user_interface, *args, **kwargs):
         if cls.__instance is None:
             cls.__instance = super(Updater, cls).__new__(cls, *args, **kwargs)
         return cls.__instance
@@ -82,11 +80,11 @@ class Updater(Config):
                 root.withdraw()
                 if self.user_interface is not None:
                     to_update = self.user_interface.askquestion("Update available!",
-                                                       "A new version of this tool is available ({})\n Do you want to "
-                                                       "update now?".format(
-                                                           last_release["name"]))
+                                                                "A new version of this tool is available ({})\n Do you want to "
+                                                                "update now?".format(
+                                                                    last_release["name"]))
                 else:
-                    to_update=True
+                    to_update = True
                 self.already_ask = True
                 root.destroy()
                 if to_update == "yes":
@@ -130,10 +128,10 @@ class Updater(Config):
             root.withdraw()
             if self.user_interface is not None:
                 restart = self.user_interface.askquestion("Update done!",
-                                             "The update is complete. To apply the changes, please restart the "
-                                             "program\nDo you want to restart?")
+                                                          "The update is complete. To apply the changes, please restart the "
+                                                          "program\nDo you want to restart?")
             else:
-                restart=True
+                restart = True
             root.destroy()
             if restart == "yes":
                 restart_program()

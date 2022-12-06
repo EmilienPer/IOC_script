@@ -148,7 +148,7 @@ class TestGetTitleAndCount(unittest.TestCase):
                 Test for well formatted date
                 :return:
                 """
-        self.assertEqual(get_title_and_count(content_to_parse),[('Warnings', '1'), ('Suggestions', '36')])
+        self.assertEqual(get_title_and_count(content_to_parse), [('Warnings', '1'), ('Suggestions', '36')])
 
 
 class TestGetSuggestionPart(unittest.TestCase):
@@ -157,7 +157,7 @@ class TestGetSuggestionPart(unittest.TestCase):
                 None should be returned is non string
                 :return:
                 """
-        self.assertEqual(get_suggestion_part(1),None)
+        self.assertEqual(get_suggestion_part(1), None)
         self.assertEqual(get_suggestion_part(None), None)
         self.assertEqual(get_suggestion_part(object()), None)
 
@@ -173,7 +173,7 @@ class TestGetSuggestionPart(unittest.TestCase):
                         Test for well formatted date
                         :return:
                         """
-        self.assertEqual(get_suggestion_part("test"+"="*80+"Good part"),"Good part")
+        self.assertEqual(get_suggestion_part("test" + "=" * 80 + "Good part"), "Good part")
 
 
 if __name__ == "__main__":

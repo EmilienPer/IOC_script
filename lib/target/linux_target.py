@@ -128,10 +128,10 @@ class Linux(OSType):
             sudo("chmod +x {}/lynis".format(self.base_lynis))
             self.log("Start Lynis analysis")
             run("export LANG=en;export LANGUAGE=en")
-            x = sudo("{}/lynis audit system  --no-colors | tee {}".format(self.base_lynis, self.lynis_report_path))
+            x = sudo("{}/lynis audit system --no-colors | tee {}".format(self.base_lynis, self.lynis_report_path))
             if "Fatal error: can't find include directory" in x:
                 with cd(self.base_lynis):
-                    x = run("{}/lynis audit system  --no-colors | tee {}".format(self.base_lynis,
+                    x = run("{}/lynis audit system --no-colors | tee {}".format(self.base_lynis,
                                                                                  self.lynis_report_path))
             self.log("End Lynis analysis")
             return x

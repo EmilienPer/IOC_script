@@ -28,15 +28,22 @@ from lib.target.generic_target import OSType
 
 class TestEscapeAnsi(unittest.TestCase):
     """Test for escape_ansi method"""
+
     def test_function(self):
-        self.assertEqual(OSType(None).escape_ansi("[2C- Detecting OS... [41C [ DONE ]"),"- Detecting OS...  [ DONE ]")
-        self.assertEqual(OSType(None).escape_ansi("[2C- Service Manager[42C [ systemd ]"),'- Service Manager [ systemd ]')
-        self.assertEqual(OSType(None).escape_ansi("[4C- configuration in /etc/profile[26C [ DEFAULT ]"),'- configuration in /etc/profile [ DEFAULT ]')
+        self.assertEqual(OSType(None).escape_ansi("[2C- Detecting OS... [41C [ DONE ]"),
+                         "- Detecting OS...  [ DONE ]")
+        self.assertEqual(OSType(None).escape_ansi("[2C- Service Manager[42C [ systemd ]"),
+                         '- Service Manager [ systemd ]')
+        self.assertEqual(OSType(None).escape_ansi("[4C- configuration in /etc/profile[26C [ DEFAULT ]"),
+                         '- configuration in /etc/profile [ DEFAULT ]')
+
 
 class TestSanitize(unittest.TestCase):
     """Test for sanitize(self, text: str, to_remove=None)"""
+
     def test_function(self):
         self.assertEqual(OSType(None).sanitize("[2C- Detecting OS... [41C [ DONE ]\r\n"),
                          "- Detecting OS...  [ DONE ]")
-        self.assertEqual(OSType(None).sanitize("[2C- Detecting OS...C:\WINDOWS\system32\conhost.exe [41C [ DONE ]\r\n"),
-                         "- Detecting OS...  [ DONE ]")
+        self.assertEqual(
+            OSType(None).sanitize("[2C- Detecting OS...C:\WINDOWS\system32\conhost.exe [41C [ DONE ]\r\n"),
+            "- Detecting OS...  [ DONE ]")
