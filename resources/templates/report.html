@@ -25,7 +25,7 @@
 <h1> IOC and security issues scanner</h1>
 
 <h2>Scan information</h2>
-<table>
+<table border="1">
     <tr>
         <th>Target:</th>
         <td>{{scan_info.target}}</td>
@@ -52,7 +52,7 @@
     </tr>
 </table>
 <h2>Executive summary</h2>
-<table>
+<table border="1">
     <tr>
         <th>Criteria</th>
         <th>Value</th>
@@ -79,7 +79,7 @@
 {%for key,value in security_issues.items()%}
 <h3>{{key}} ({{value.count}})</h3>
 
-<table>
+<table border="1">
     <tr>
         <th width="70%">Suggestion</th>
         <th>Ref</th>
@@ -99,7 +99,7 @@
 <h2>IOC scan</h2>
 <h3> Detected dangerous Files</h3>
 {% for line in loki.FileScan %}
-<table>
+<table border="1">
     <tr>
         <th style="background: gainsboro">Path</th>
         <td colspan="5" style="background: gainsboro">{{line.file_path}}</td>
