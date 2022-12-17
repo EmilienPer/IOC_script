@@ -7,16 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8"]
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Package Application
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: ioc_security_issues_scanner.py
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ioc_security_issues_scanner
-        path: dist/windows
