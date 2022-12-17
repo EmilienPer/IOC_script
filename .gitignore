@@ -200,3 +200,5 @@ pip-selfcheck.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,virtualenv
+resources/tools/loki/signature-base/yara/apt_wilted_tulip.yar
+resources/tools/loki/signature-base/yara/gen_powershell_susp.yar
